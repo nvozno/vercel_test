@@ -1,5 +1,1 @@
-Flask==1.1.2
-Werkzeug==1.0.0
-uvicorn
-requests
-pydantic
+flask==1.0.2
