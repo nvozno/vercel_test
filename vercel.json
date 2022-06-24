@@ -1,9 +1,14 @@
 {
     "version": 2,
     "builds": [
-        { "src": "app.py", "use": "@now/python" }
+        { "src": "*.html", "use": "@vercel/static" },
+        { "src": "api/*.py", "use": "@vercel/python" }
     ],
     "routes": [
-        { "src": "/(.*)", "dest": "app.py" }
+        { "src": "/", "dest": "/index.html" },
+        { "src": "/api/date", "dest": "/api/date.py" },
+        { "src": "/api/ip/(.*)", "dest": "/api/ip_query.py" },
+        { "src": "/api/(.*)", "dest": "/api/web.py" }, 
+        { "src": "/(.*)", "status": 404, "dest": "/404.html" }
     ]
 }
