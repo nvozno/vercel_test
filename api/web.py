@@ -1,19 +1,7 @@
-from flask import Flask
+from flask import Flask, Response
 app = Flask(__name__)
-@app.route('/')
-def home():
-    return 'Home Page Route'
-@app.route('/about')
-def about():
-    return 'About Page Route'
-@app.route('/portfolio')
-def portfolio():
-    return 'Portfolio Page Route'
-@app.route('/contact')
-def contact():
-    return 'Contact Page Route'
-@app.route('/api')
-def api():
-    with open('data.json', mode='r') as my_file:
-        text = my_file.read()
-        return text
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
