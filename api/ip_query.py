@@ -5,7 +5,7 @@ import requests
 class handler(BaseHTTPRequestHandler):
 
   def do_GET(self):
-    ip = requests.get('https://api.ip.sb/ip').text
+    ip = requests.get('https://api.nogizaka46.bid/ip.php').text
     self.send_response(200)
     self.send_header('Content-type', 'text/plain')
     self.end_headers()
