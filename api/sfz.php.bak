@@ -3637,7 +3637,7 @@ function get_addr($id){
         $areaArray['513432'] = '四川省凉山彝族自治州喜德县';
         return $areaArray[$index];
     }
-echo 'hello'
+echo 'hello';
 echo isIdCard($_GET["id"]);
 //echo isIdCard($_POST["id"]);
 ?>
