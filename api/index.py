@@ -22,7 +22,7 @@ def get_video_json(vimeo_id, video_id):
                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0'}
     url = 'https://player.vimeo.com/video/' + vimeo_id
 
-    r = requests.get(url, headers=headers, verify=True, proxies=proxies)
+    r = requests.get(url, headers=headers, verify=True)
     pattern = re.compile(r'(?<=var config = ).+(?=; if \(!config.request)')
     result = pattern.findall(r.text)
     if len(result) == 0:
@@ -147,3 +147,7 @@ def get_url(video_id):
         else:
             dl_url = act_video_json(video_json)
             return dl_url
+
+if __name__ == '__main__':
+    #app.after_request(after_request)
+    app.run(host='0.0.0.0')
