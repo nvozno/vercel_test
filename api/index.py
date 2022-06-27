@@ -135,7 +135,7 @@ def test():
 @app.route('/api/iv/<video_id>/')
 def get_url(video_id):
     if not video_id.isdigit():
-        return '你是傻逼吗？！'
+        return '404 Not Found', 404
     vimeo_id = get_html_json_and_vimeo_id(video_id)
     if vimeo_id is None:
         return 'ID:' + str(video_id) + '基础信息获取失败，无法录制！'
@@ -143,10 +143,11 @@ def get_url(video_id):
         # print(vimeo_id)
         video_json = get_video_json(vimeo_id, video_id)
         if video_json is None:
-            return 'ID:' + str(video_id) + '详细信息获取失败，无法下载！'
+            return '404 Not Found', 404
         else:
             dl_url = act_video_json(video_json)
-            return dl_url
+            return redirect(dl_url, 301)
+            # return dl_url
 
 if __name__ == '__main__':
     #app.after_request(after_request)
