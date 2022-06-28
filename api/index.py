@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, redirect
+from flask import Flask, jsonify, render_template, redirect, make_response
 import json
 import os
 import re
@@ -146,8 +146,11 @@ def get_url(video_id):
             return '404 Not Found', 404
         else:
             dl_url = act_video_json(video_json)
-            return redirect(dl_url, 301)
-            # return dl_url
+            res = make_response(redirect(dl_url, 301))
+            video_title = video_json['video']['title']
+            res.headers['content-disposition'] = 'attachment; filename="%s"' % video_title
+            res.headers['Content-Type'] = 'video/mp4'
+
 
 if __name__ == '__main__':
     #app.after_request(after_request)
