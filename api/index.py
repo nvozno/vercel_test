@@ -150,6 +150,7 @@ def get_url(video_id):
             video_title = video_json['video']['title']
             res.headers['content-disposition'] = 'attachment; filename="%s"' % video_title
             res.headers['Content-Type'] = 'video/mp4'
+            return res
 
 
 if __name__ == '__main__':
