@@ -146,8 +146,8 @@ def get_url(video_id):
             return '404 Not Found', 404
         else:
             dl_url = act_video_json(video_json)
-            video_title = video_json['video']['title']
-            file_name = 'video_id' + '#' + video_json['video']['title'] + '.mp4'
+            video_title = json.loads(video_json)['video']['title']
+            file_name = video_id + '#' + video_json['video']['title'] + '.mp4'
             res = "<a href='%s' download='%s'>%s</a>" % (dl_url, file_name, video_title)
             return res
 
