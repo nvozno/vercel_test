@@ -127,9 +127,18 @@ def hello():
     return 'Hello, World!'
 
 
-@app.route('/test')
+@app.route('/test/')
 def test():
-    return 'Test'
+    dl_url = 'https://vod-progressive.akamaized.net/exp=1656407754~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F2009%2F20%2F510048428%2F2351492313.mp4~hmac=cfc9656cb4960ad991b1cdae8e0bf1974bb46adc9c18bdd63ef129c56c04bc22/vimeo-prod-skyfire-std-us/01/2009/20/510048428/2351492313.mp4'
+    # res = make_response(redirect(dl_url, 302))
+    # res = make_response(dl_url)
+    # res.status = '302'
+    video_title = 'haha'
+    # res.headers['content-disposition'] = 'attachment; filename="%s"' % video_title
+    # res.headers['Content-Type'] = 'video/mp4'
+    
+    res = "<a href='%s' download='%s'>下载</a>" % (dl_url, video_title)
+    return res
 
 
 @app.route('/api/iv/<video_id>/')
@@ -146,9 +155,12 @@ def get_url(video_id):
             return '404 Not Found', 404
         else:
             dl_url = act_video_json(video_json)
+            #res = make_response(redirect(dl_url, 301))
+            res = make_response(dl_url)
+            #res.status = '301'
             video_title = video_json['video']['title']
-            file_name = 'video_id' + '#' + video_json['video']['title'] + '.mp4'
-            res = "<a href='%s' download='%s'>%s</a>" % (dl_url, file_name, video_title)
+            res.headers['content-disposition'] = 'attachment; filename="%s"' % video_title
+            res.headers['Content-Type'] = 'video/mp4'
             return res
 
 
