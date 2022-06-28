@@ -3,7 +3,10 @@ import json
 import os
 import re
 import requests
+
 app = Flask(__name__)
+
+proxies = {}
 
 
 def get_video_json(vimeo_id, video_id):
@@ -22,7 +25,7 @@ def get_video_json(vimeo_id, video_id):
                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0'}
     url = 'https://player.vimeo.com/video/' + vimeo_id
 
-    r = requests.get(url, headers=headers, verify=True)
+    r = requests.get(url, headers=headers, verify=True, proxies=proxies)
     pattern = re.compile(r'(?<=var config = ).+(?=; if \(!config.request)')
     result = pattern.findall(r.text)
     if len(result) == 0:
@@ -106,7 +109,8 @@ def get_html_json_and_vimeo_id(video_id):
 
             # 读取vimeo id并返回
             if 'vimeo_link' in html_json:
-                return html_json['vimeo_link'].split('com/')[1].split('/')[0]
+                return html_json['vimeo_link'].split('com/')[1].split('/')[0], html_json['title'], html_json[
+                    'performance']
             else:
                 return None
 
@@ -136,7 +140,8 @@ def test():
 def get_url(video_id):
     if not video_id.isdigit():
         return '404 Not Found', 404
-    vimeo_id = get_html_json_and_vimeo_id(video_id)
+    res_html = get_html_json_and_vimeo_id(video_id)
+    vimeo_id = res_html[0]
     if vimeo_id is None:
         return '404 Not Found', 404
     else:
@@ -146,12 +151,12 @@ def get_url(video_id):
             return '404 Not Found', 404
         else:
             dl_url = act_video_json(video_json)
-            video_title = json.loads(video_json)['video']['title']
-            file_name = video_id + '#' + video_json['video']['title'] + '.mp4'
+            video_title = res_html[1] + '@' + res_html[2]
+            file_name = video_id + '#' + video_title + '.mp4'
             res = "<a href='%s' download='%s'>%s</a>" % (dl_url, file_name, video_title)
             return res
 
 
 if __name__ == '__main__':
-    #app.after_request(after_request)
+    # app.after_request(after_request)
     app.run(host='0.0.0.0')
